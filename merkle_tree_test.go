@@ -52,4 +52,20 @@ func TestMultipleBlocksFile(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, m.hashBytes([]byte(rStr[:10])), m.root.left.hashValue)
 	assert.Equal(t, m.hashBytes([]byte(rStr[10:])), m.root.right.hashValue)
+
+	rStr = randStr(10240)
+	m, err = NewMerkleTree(strings.NewReader(rStr), 10, fnv.New128())
+	assert.Nil(t, err)
+	assert.Equal(t, 10, m.Root().height)
+}
+
+func TestFileCompare(t *testing.T) {
+	m1, _ := NewMerkleTree(strings.NewReader(randStr(200)), 10, fnv.New128())
+	m2, _ := NewMerkleTree(strings.NewReader(randStr(150)), 10, fnv.New128())
+	assert.NotEqual(t, m1.Root().GetValue(), m2.Root().GetValue())
+
+	rStr := randStr(150)
+	m1, _ = NewMerkleTree(strings.NewReader(rStr), 10, fnv.New128())
+	m2, _ = NewMerkleTree(strings.NewReader(rStr), 10, fnv.New128())
+	assert.Equal(t, m1.Root().GetValue(), m2.Root().GetValue())
 }

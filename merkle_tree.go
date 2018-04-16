@@ -63,7 +63,7 @@ func (m *MerkleTree) createParent(n1, n2 *MerkleTreeNode) *MerkleTreeNode {
 		left:      n1,
 		right:     n2,
 		hashValue: m.hashBytes(n1.hashValue, n2.hashValue),
-		height:    n1.height,
+		height:    n1.height + 1,
 	}
 }
 
